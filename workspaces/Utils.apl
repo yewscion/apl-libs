@@ -1,7 +1,7 @@
 #!/gnu/store/7zlgpa87r2rfcw1d63r2wbblavamaf2v-gnu-apl-1.8-r1587/bin/apl --script
  ⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝
 ⍝                                                                    ⍝
-⍝ Utils                                2022-09-05  21:33:34 (GMT-4)  ⍝
+⍝ Utils                                2022-09-06  18:59:39 (GMT-4)  ⍝
 ⍝                                                                    ⍝
  ⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝
 
@@ -26,7 +26,6 @@
  ⍝ Impurities
  ⍝ ==========
  ⍝ None.
- 
  ⍝ First we find each occurance of ⍺ in ⍵, creating the boolean mask.
  A←⍺⍷⍵
  ⍝ Then we do a plus-reduce (summation) on A, returning the result.
@@ -36,7 +35,7 @@
 ∇Z←COUNTVOWELS ⍵;A;E;I;O;U;Y;Total
  ⍝ Count each vowel (A E I O U Y) in ⍵, as well as the total length of ⍵.
  ⍝
- ⍝ This is a Calculation.
+ ⍝ This is a CALCULATION.
  ⍝
  ⍝ Arguments
  ⍝ =========
@@ -71,6 +70,37 @@
  Total←≢⍵
  ⍝ Return the array.
  Z←A E I O U Y Total
+∇
+
+∇Z←FIX_GRADE_LETTER ⍵
+ ⍝ Ensure Single-Letter Grades have a ' ' appended.
+ ⍝
+ ⍝ This is a CALCULATION.
+ ⍝
+ ⍝ Arguments
+ ⍝ =========
+ ⍝ ⍵ <string>: The grade to consider.
+ ⍝
+ ⍝ Local Variables
+ ⍝ ===============
+ ⍝ None.
+ ⍝
+ ⍝ Returns
+ ⍝ =======
+ ⍝ Z <string>: Either the original string, or the first character thereof
+ ⍝ followed by a ' '.
+ ⍝
+ ⍝ Impurities
+ ⍝ ==========
+ ⍝ None.
+ ⍝
+ ⍝ If the string is already 2 characters long, assume it is good.
+ →(2=⍴⍵)/GOOD
+ ⍝ Otherwise, take the first character and add a ' '.
+ ⍵←1 0\⍵
+ GOOD:
+ ⍝ Return that string.
+ Z←⍵
 ∇
 
 ∇Z←FORMATVOWELS ⍵;A;E;I;O;U;Y;Total;Counts
@@ -122,6 +152,81 @@
  Z←Z,"\nO  " (5 0⍕O)  (7 2⍕100×O÷Total)
  Z←Z,"\nU  " (5 0⍕U)  (7 2⍕100×U÷Total)
  Z←Z,"\nY  " (5 0⍕Y)  (7 2⍕100×Y÷Total)
+∇
+
+∇Z←TO_GRADE_POINT ⍵;A;B
+ ⍝ Convert a letter grade ('B+') to a Grade Point (3.3).
+ ⍝
+ ⍝ This is a CALCULATION.
+ ⍝
+ ⍝ Arguments
+ ⍝ =========
+ ⍝ ⍵ <string>: The letter grade, should be length 2 (If the grade doesn't have
+ ⍝ a modifier, then the second character should be ' '.
+ ⍝
+ ⍝ Local Variables
+ ⍝ ===============
+ ⍝ A <number>: The integer part of the grade point.
+ ⍝ B <number>: The fractional part of the grade point.
+ ⍝
+ ⍝ Returns
+ ⍝ =======
+ ⍝ Z <number>: The grade point associated with the grade given in ⍵.
+ ⍝
+ ⍝ Impurities
+ ⍝ ==========
+ ⍝ None.
+ ⍝
+ ⍝ If the letter isn't recognizable as a grade, go to ERROR.
+ →(~⍵[1]∊↑ALIST_LETTERS[1])/ERROR
+ ⍝ Otherwise, look up the two parts of the grade based on standards.
+ A←⍵[1] assoc ALIST_LETTERS
+ B←⍵[2] assoc ALIST_MODS
+ ⍝ Adding them together gives the grade point, which we should return.
+ Z←A+B
+ →0
+ ERROR:
+ ⍝ If we don't recognize the letter, assume the grade is present but worth
+ ⍝ 0.
+ Z←0
+∇
+
+∇Z←UnweightedGPA ⍵;Count;Sum
+ ⍝ Calculate the unweighted GPA for a given list of grades.
+ ⍝
+ ⍝ This is a CALCULATION.
+ ⍝
+ ⍝ Arguments
+ ⍝ =========
+ ⍝ ⍵ <array of character arrays>: each grade should be in its own array, as it
+ ⍝ is a length two character array itself. An array of those is
+ ⍝ expected. Specifying them as 'A' 'B+' 'C' works fine.
+ ⍝
+ ⍝ Local Variables
+ ⍝ ===============
+ ⍝ Count <number>: The number of grades given.
+ ⍝ Sum <number>: The total of grade points earned.
+ ⍝
+ ⍝ Returns
+ ⍝ =======
+ ⍝ Z <number>: The unweighted GPA calculated from the grades given.
+ ⍝
+ ⍝ Impurities
+ ⍝ ==========
+ ⍝ None.
+ ⍝
+ ⍝ Get a count first, as we need that for later.
+ Count←≢⍵
+ ⍝ If we have any single-letter grades, we need to fix them. If not, skip to
+ ⍝ GOOD.
+ →(~∊+/1=⍴¨⍵)/GOOD
+ ⍝ Fix them using a dedicated procedure.
+ ⍵←FIX_GRADE_LETTER¨⍵
+ GOOD:
+ ⍝ Sum all of the grade points together.
+ Sum←+/ TO_GRADE_POINT¨⍵
+ ⍝ Divide that sum by the count from earlier and return it.
+ Z←∊Sum÷Count
 ∇
 
 ∇VowelReport ⍵;PW
@@ -193,6 +298,43 @@
  ⍝ Present the result in dollars.
  Z←10 2⍕(B÷100)
 ∇
+
+∇Z←⍺ assoc ⍵
+ ⍝ Find the value in ⍵ for the key ⍺.
+ ⍝
+ ⍝ This is a CALCULATION.
+ ⍝
+ ⍝ Arguments
+ ⍝ =========
+ ⍝ ⍵ <array of arrays>: An APL-style A-list ((foo bar baz) (foo bar baz)) in
+ ⍝ which to look.
+ ⍝ ⍺ <string> or <number>: The key to look for in the first part of the A-List
+ ⍝ ⍵.
+ ⍝
+ ⍝ Local Variables
+ ⍝ ===============
+ ⍝ None.
+ ⍝
+ ⍝ Returns
+ ⍝ =======
+ ⍝ Z <string or number>: The value associated with ⍺ in ⍵. Without a match, an
+ ⍝ empty (rank 0) array.
+ ⍝
+ ⍝ Impurities
+ ⍝ ==========
+ ⍝ None.
+ ⍝
+ Z←(⍺⍷↑⍵[1])/↑⍵[2]
+∇
+
+ALIST_LETTERS←00 00
+    ((⎕IO+0)⊃ALIST_LETTERS)←'ABCDF'
+    ((⎕IO+1)⊃ALIST_LETTERS)←4 3 2 1 0
+
+ALIST_MODS←00 00
+    ((⎕IO+0)⊃ALIST_MODS)←'- +'
+    ((⎕IO+1)⊃ALIST_MODS)←⊂3⍴0 ⍝ prolog ≡2
+    (⊃((⎕IO+1)⊃ALIST_MODS))[⍳3]←¯0.30000000000000004 0 0.30000000000000004
 
 ⎕CT←1E¯13
 
