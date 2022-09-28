@@ -1,7 +1,7 @@
-#!/gnu/store/7zlgpa87r2rfcw1d63r2wbblavamaf2v-gnu-apl-1.8-r1587/bin/apl --script
+#!/gnu/store/apsw4dbzq9c6alpfbsq0jh20r03ghj5i-gnu-apl-1.8-r1587/bin/apl --script
  ⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝
 ⍝                                                                    ⍝
-⍝ Utils                                2022-09-06  18:59:39 (GMT-4)  ⍝
+⍝ Utils                                2022-09-28  15:05:32 (GMT-4)  ⍝
 ⍝                                                                    ⍝
  ⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝
 
@@ -219,7 +219,7 @@
  Count←≢⍵
  ⍝ If we have any single-letter grades, we need to fix them. If not, skip to
  ⍝ GOOD.
- →(~∊+/1=⍴¨⍵)/GOOD
+ ⍝→{~0<+/1=⍴¨⍵}/GOOD
  ⍝ Fix them using a dedicated procedure.
  ⍵←FIX_GRADE_LETTER¨⍵
  GOOD:
