@@ -1,7 +1,7 @@
-#!/gnu/store/apsw4dbzq9c6alpfbsq0jh20r03ghj5i-gnu-apl-1.8-r1587/bin/apl --script
+#!/gnu/store/xkhg3vpjmrwwpdpn6078hzl2iz8vls3g-gnu-apl-1.8-r1587/bin/apl --script
  ⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝
 ⍝                                                                    ⍝
-⍝ Utils                                2022-09-28  15:05:32 (GMT-4)  ⍝
+⍝ Utils                                2023-06-05  12:46:26 (GMT-4)  ⍝
 ⍝                                                                    ⍝
  ⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝
 
@@ -152,6 +152,27 @@
  Z←Z,"\nO  " (5 0⍕O)  (7 2⍕100×O÷Total)
  Z←Z,"\nU  " (5 0⍕U)  (7 2⍕100×U÷Total)
  Z←Z,"\nY  " (5 0⍕Y)  (7 2⍕100×Y÷Total)
+∇
+
+∇Z←⍺ RemoveDiscount ⍵
+ ⍝ Remove an already-applied discount, to reveal the original price.
+ ⍝
+ ⍝ This is a CALCULATION.
+ ⍝
+ ⍝ Arguments
+ ⍝ =========
+ ⍝ ⍺ <number>: The decimal representation of a discount; 10% would be 0.1.
+ ⍝ ⍵ <number>: The final price, after the discount is applied.
+ ⍝
+ ⍝ Returns
+ ⍝ =======
+ ⍝ Z <number>: The original price, before the discount was applied.
+ ⍝
+ ⍝ Impurities
+ ⍝ ==========
+ ⍝ None.
+ ⍝
+ Z ← ⍵ + (⍵ × (⍺ ÷ ((¯1 × ⍺) + 1)))
 ∇
 
 ∇Z←TO_GRADE_POINT ⍵;A;B
